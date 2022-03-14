@@ -36,7 +36,7 @@ resource "aws_default_subnet" "default_az2" {
 #================== Modules ================
 
 module "alb" {
-  source   = "../../modules/networking/alb"
+  source   = "github.com/modon1999/Modules_Terraform_Up_and_Running//networking/alb?ref=v0.0.7"
   subnets  = [aws_default_subnet.default_az1.id, aws_default_subnet.default_az2.id]
   alb_name = "example"
 }

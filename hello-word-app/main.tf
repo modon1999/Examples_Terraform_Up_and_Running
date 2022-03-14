@@ -18,6 +18,7 @@ terraform {
 }
 
 #=============== Data ===============
+
 data "aws_availability_zones" "available" {}
 data "aws_vpc" "default" {
   # Data about default vpc
@@ -36,7 +37,7 @@ resource "aws_default_subnet" "default_az2" {
 #================== Modules ================
 
 module "hello-world-app" {
-  source                 = "../../modules/services/hello-world-app"
+  source                 = "github.com/modon1999/Modules_Terraform_Up_and_Running//services/hello-world-app?ref=v0.0.7"
   subnet_ids             = [aws_default_subnet.default_az1.id, aws_default_subnet.default_az2.id]
   environment            = "example"
   vpc_id                 = data.aws_vpc.default.id

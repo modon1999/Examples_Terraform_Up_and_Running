@@ -20,7 +20,7 @@ terraform {
 #================== Modules ================
 
 module "mysql" {
-  source           = "../../modules/data-stores/mysql"
+  source           = "github.com/modon1999/Modules_Terraform_Up_and_Running//data-stores/mysql?ref=v0.0.7"
   password_name_db = "/example"
   name_db          = "example"
   type_db          = "db.t2.micro"

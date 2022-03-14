@@ -37,7 +37,7 @@ resource "aws_default_subnet" "default_az2" {
 #================== Modules ================
 
 module "asg" {
-  source             = "../../modules/cluster/asg-rolling-deploy"
+  source             = "github.com/modon1999/Modules_Terraform_Up_and_Running//cluster/asg-rolling-deploy?ref=v0.0.7"
   cluster_name       = var.cluster_name
   ami                = "ami-0f61af304b14f15fb"
   instance_type      = "t2.micro"
