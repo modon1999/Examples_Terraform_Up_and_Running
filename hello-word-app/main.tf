@@ -3,6 +3,20 @@ provider "aws" {
   region = "eu-central-1"
 }
 
+#=============== State ===============
+
+terraform {
+  backend "s3" {
+    # Поменяйте это на имя своего бакета!
+    bucket = "modon-terraform-up-and-running-state"
+    key    = "examples/hello-word-app/terraform.tfstate"
+    region = "eu-central-1"
+    # Замените это именем своей таблицы DynamoDB!
+    dynamodb_table = "terraform-up-and-running-locks"
+    encrypt        = true
+  }
+}
+
 #=============== Data ===============
 data "aws_availability_zones" "available" {}
 data "aws_vpc" "default" {
@@ -22,20 +36,18 @@ resource "aws_default_subnet" "default_az2" {
 #================== Modules ================
 
 module "hello-world-app" {
-  source             = "../../modules/services/hello-world-app"
-  subnet_ids         = [aws_default_subnet.default_az1.id, aws_default_subnet.default_az2.id]
-  environment        = "example"
-  vpc_id             = data.aws_vpc.default.id
-  password_name_db   = "/example"
-  type_db            = "db.t2.micro"
-  storage_db         = 10
-  username_db        = "admin"
-  server_port        = 80
-  ami                = "ami-0f61af304b14f15fb"
-  instance_type      = "t2.micro"
-  min_size           = 1
-  max_size           = 1
-  enable_autoscaling = false
+  source                 = "../../modules/services/hello-world-app"
+  subnet_ids             = [aws_default_subnet.default_az1.id, aws_default_subnet.default_az2.id]
+  environment            = "example"
+  vpc_id                 = data.aws_vpc.default.id
+  server_port            = 80
+  ami                    = "ami-0f61af304b14f15fb"
+  instance_type          = "t2.micro"
+  min_size               = 1
+  max_size               = 1
+  enable_autoscaling     = false
+  db_remote_state_bucket = "modon-terraform-up-and-running-state"
+  db_remote_state_key    = "examples/mysql/terraform.tfstate"
   custom_tags = {
     name = "EXAMPLE"
   }

@@ -3,6 +3,20 @@ provider "aws" {
   region = "eu-central-1"
 }
 
+#=============== State ===============
+
+terraform {
+  backend "s3" {
+    # Поменяйте это на имя своего бакета!
+    bucket = "modon-terraform-up-and-running-state"
+    key    = "examples/asg-rolling-deploy/terraform.tfstate"
+    region = "eu-central-1"
+    # Замените это именем своей таблицы DynamoDB!
+    dynamodb_table = "terraform-up-and-running-locks"
+    encrypt        = true
+  }
+}
+
 #=============== Data ===============
 
 data "aws_availability_zones" "available" {}
